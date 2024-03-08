@@ -8,7 +8,7 @@ const Header: React.FC = () => {
   const isActive: (pathname: string) => boolean = (pathname) =>
     router.pathname === pathname;
 
-  const {data: session, status} = useSession();
+  const { data: session, status } = useSession();
 
   let left = (
     <div className="left">
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
 
   let right = null;
 
-  if (status === 'loading') {
+  if (status === "loading") {
     left = (
       <div className="left">
         <Link href="/" legacyBehavior>
@@ -113,85 +113,93 @@ const Header: React.FC = () => {
     );
   }
 
-  if (session) {
-    left = (
-      <div className="left">
-        <Link href="/" legacyBehavior>
-          <a className="bold" data-active={isActive("/")}>
-            Agenda Semanal
-          </a>
-        </Link>
-        <Link href="/drafts" legacyBehavior >
-          <a className="bold" data-active={isActive("/drafts")}>Agenda Diaria</a>
-        </Link>
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
+ 
+if (session) {
+  left = (
+    <div className="left">
+      <Link href="/create" legacyBehavior>
+        <a className="bold" data-active={isActive("/create")}>
+          Cargar Movimiento
+        </a>
+      </Link>
+      <Link href="/drafts" legacyBehavior>
+        <a className="bold" data-active={isActive("/drafts")}>
+          Movimientos Diarios
+        </a>
+      </Link>
+      <Link href="/" legacyBehavior>
+        <a className="bold" data-active={isActive("/")}>
+          Agenda Semanal
+        </a>
+      </Link>
+      <style jsx>{`
+        .bold {
+          font-weight: bold;
+          color: gray;
+        }
 
-          a {
-            text-decoration: none;
-            color: #000;
-            display: inline-block;
-          }
+        a {
+          text-decoration: none;
+          color: #000;
+          display: inline-block;
+        }
 
-          .left a[data-active="true"] {
-            color: gray;
-          }
+        .left a[data-active="true"] {
+          color: black;
+        }
 
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
-      </div>
-    );
-    right = (
-      <div className="right">
-        <p>
-          {session.user.name} ({session.user.email})
-        </p>
-        <Link href="/create" legacyBehavior>
-          <button>
-            <a>Cargar Movimiento</a>
-          </button>
-        </Link>
-        <button onClick={() => signOut()}>
-          <a>Cerrar Sesion</a>
-        </button>
-        <style jsx>{`
-          a {
-            text-decoration: none;
-            color: #000;
-            display: inline-block;
-          }
+        a + a {
+          margin-left: 1rem;
+        }
+      `}</style>
+    </div>
+  );
 
-          p {
-            display: inline-block;
-            font-size: 13px;
-            padding-right: 1rem;
-          }
+  right = (
+    <div className="right">
+      <span>
+       {session.user.email}
+      </span>
+     
+      <button onClick={() => signOut()}>
+        <a>Cerrar Sesion</a>
+      </button>
+      <style jsx>{`
+        a {
+          text-decoration: none;
+          color: #000;
+          display: inline-block;
+        }
 
-          a + a {
-            margin-left: 1rem;
-          }
+        p {
+          display: inline-block;
+          font-size: 13px;
+          padding-right: 1rem;
+        }
 
-          .right {
-            margin-left: auto;
-          }
+        a + a {
+          margin-left: 1rem;
+        }
 
-          .right a {
-            border: 1px solid black;
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-          }
+        .right {
+          margin-left: auto;
+        }
 
-          button {
-            border: none;
-          }
-        `}</style>
-      </div>
-    );
-  }
+        .right a {
+          border: 1px solid black;
+          padding: 0.5rem 1rem;
+          border-radius: 3px;
+        }
+
+        button {
+          background-color: white;
+          border: none;
+          cursor: pointer; /* Agregado para indicar que es un elemento interactivo */
+        }
+      `}</style>
+    </div>
+  );
+}
 
   return (
     <nav>
@@ -202,6 +210,7 @@ const Header: React.FC = () => {
           display: flex;
           padding: 2rem;
           align-items: center;
+          background-color: white;
         }
       `}</style>
     </nav>

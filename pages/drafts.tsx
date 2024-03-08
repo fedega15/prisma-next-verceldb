@@ -53,10 +53,10 @@ const Drafts: React.FC<Props> = (props) => {
   return (
     <Layout>
       <div className="page">
-        <h1>Movimientos diarios</h1>
-        {props.drafts.length > 0 && (
+        <h1>Movimientos diarios  {props.drafts.length > 0 && (
           <button onClick={publishAllPosts}>Publicar Todos</button>
-        )}
+        )}</h1>
+      
         <main>
           {props.drafts.map((post) => (
             <div key={post.id} className="post">
@@ -67,7 +67,7 @@ const Drafts: React.FC<Props> = (props) => {
       </div>
       <style jsx>{`
         .post {
-          background: gray;
+          background: white;
           transition: box-shadow 0.1s ease-in;
         }
 
@@ -76,7 +76,7 @@ const Drafts: React.FC<Props> = (props) => {
         }
 
         .post + .post {
-          margin-top: 2rem;
+          margin-top: 0.5rem;
         }
 
         button {

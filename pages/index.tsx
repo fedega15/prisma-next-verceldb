@@ -38,7 +38,7 @@ const Blog: React.FC<Props> = (props) => {
   return (
     <Layout>
       <div className="page">
-        <h1>Movimientos semanales</h1>
+        <h1>Agenda Semanal</h1>
         <main>
           {session ? (
             props.feed.map((post) => (
@@ -55,7 +55,7 @@ const Blog: React.FC<Props> = (props) => {
       </div>
       <style jsx>{`
         .post {
-          background: gray;
+          background: white;
           transition: box-shadow 0.3s ease-in;
         }
 
@@ -64,7 +64,7 @@ const Blog: React.FC<Props> = (props) => {
         }
 
         .post + .post {
-          margin-top: 2rem;
+          margin-top: 0.5rem;
         }
       `}</style>
     </Layout>
