@@ -8,7 +8,6 @@ export type PostProps = {
   content: string;
   published: boolean;
   createdAt: string;
-  movementType: string; // Nueva propiedad para el tipo de movimiento
 };
 
 // components/Post.tsx
