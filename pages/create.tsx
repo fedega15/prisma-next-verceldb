@@ -10,14 +10,14 @@ const Draft: React.FC = () => {
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      // Verificar si se ha seleccionado un tipo de movimiento
-      if (!movementType) {
-        // Si no se ha seleccionado, mostrar un mensaje de error
-        console.error("Selecciona un tipo de movimiento");
-        return;
-      }
+      // Detectar el tipo de movimiento en función del contenido del título
+      const isEgreso = title.toLowerCase().includes("egreso");
+      const isIngreso = title.toLowerCase().includes("ingreso");
 
-      const body = { title, content, movementType };
+      // Actualizar el estado del tipo de movimiento
+      setMovementType(isEgreso ? "egreso" : isIngreso ? "ingreso" : "");
+
+      const body = { title, content };
       await fetch(`/api/post`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,44 +34,27 @@ const Draft: React.FC = () => {
       <div>
         <form onSubmit={submitData}>
           <h1>Cargar Nuevo</h1>
-          {/* Utilizar círculos como botones para seleccionar el tipo de movimiento */}
-          <div className="circle-buttons">
-            <div
-              className={`circle egreso ${movementType === "egreso" ? "selected" : ""}`}
-              onClick={() => setMovementType("egreso")}
-            />Egreso
-            <div 
-              className={`circle ingreso ${movementType === "ingreso" ? "selected" : ""}`}
-              onClick={() => setMovementType("ingreso")}
-            />
-            Ingreso
-          </div>
-          {/* Mostrar aviso según el tipo de movimiento */}
-          {movementType && (
-            <p >
-              Este movimiento es un {movementType}
-            </p>
-          )}
           <input
             autoFocus
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Monto "
+            placeholder="Monto y tipo de movimiento  "
             type="text"
             value={title}
           />
-        
+          {/* Mostrar aviso según el tipo de movimiento */}
+          {movementType && (
+            <p className={`movement-type ${movementType}`}>
+              Este movimiento es un {movementType}
+            </p>
+          )}
           <textarea
             cols={50}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Descripción"
+            placeholder="Descripcion"
             rows={8}
             value={content}
           />
-          <input
-            disabled={!content || !title || !movementType}
-            type="submit"
-            value="Crear Movimiento"
-          />
+          <input disabled={!content || !title} type="submit" value="Crear Movimiento " />
           <a className="back" href="#" onClick={() => Router.push("/")}>
             Cancelar
           </a>
@@ -84,31 +67,6 @@ const Draft: React.FC = () => {
           display: flex;
           justify-content: center;
           align-items: center;
-        }
-
-        .circle-buttons {
-          display: flex;
-          gap: 10px;
-        }
-
-        .circle {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          cursor: pointer;
-          transition: background 0.3s;
-        }
-
-        .egreso {
-          background: red;
-        }
-
-        .ingreso {
-          background: green;
-        }
-
-        .circle.selected {
-          border: 2px solid black;
         }
 
         input[type="text"],
