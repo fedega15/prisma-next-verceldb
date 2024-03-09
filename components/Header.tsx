@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
@@ -10,222 +10,216 @@ const Header: React.FC = () => {
 
   const { data: session, status } = useSession();
 
+  // Estado para controlar la apertura/cierre de los menús desplegables
+  const [leftMenuOpen, setLeftMenuOpen] = useState(false);
+  const [rightMenuOpen, setRightMenuOpen] = useState(false);
+
+  const toggleLeftMenu = () => {
+    setLeftMenuOpen(!leftMenuOpen);
+  };
+
+  const toggleRightMenu = () => {
+    setRightMenuOpen(!rightMenuOpen);
+  };
+
   let left = (
     <div className="left">
-      <Link href="/" legacyBehavior>
-        <a className="bold" data-active={isActive("/")}>
-          Agenda Semanal
-        </a>
-      </Link>
+      <button onClick={toggleLeftMenu}>
+        <span className="bold">MENU</span>
+        <span>&#9662;</span>
+      </button>
+      {leftMenuOpen && (
+        <div className="dropdown-content">
+          <Link href="/create" legacyBehavior>
+            <a className="bold" data-active={isActive("/create")}>
+              Cargar Movimiento
+            </a>
+          </Link>
+          <Link href="/drafts" legacyBehavior>
+            <a className="bold" data-active={isActive("/drafts")}>
+              Movimientos Diarios
+            </a>
+          </Link>
+          <Link href="/" legacyBehavior>
+            <a className="bold" data-active={isActive("/")}>
+              Agenda Semanal
+            </a>
+          </Link>
+        </div>
+      )}
       <style jsx>{`
+        .left {
+          margin-right: 1rem;
+        }
+
+        button {
+          background: none;
+          border: none;
+          padding: 0;
+          font: inherit;
+          cursor: pointer;
+          outline: inherit;
+          display: flex;
+          align-items: center;
+        }
+
         .bold {
           font-weight: bold;
+          margin-right: 5px;
         }
 
-        a {
+        span {
+          margin-left: 5px;
+        }
+
+        .dropdown-content {
+         
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+          z-index: 1;
+          
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
           text-decoration: none;
-          color: #000;
-          display: inline-block;
+          display: block;
+          
         }
+        
 
-        .left a[data-active="true"] {
-          color: gray;
-        }
-
-        a + a {
-          margin-left: 1rem;
+        .dropdown-content a:hover {
+          background-color: #f1f1f1;
         }
       `}</style>
     </div>
   );
 
-  let right = null;
+  let right = (
+    <div className="right">
+      <button onClick={toggleRightMenu}>
+        <span className="bold right">SESION</span>
+        <span>&#9662;</span>
+      </button>
+      {rightMenuOpen && (
+        <div className="dropdown-content">
+          {session ? (
+            <div>
+              <span>{session.user.email}</span>
+              <button onClick={() => signOut()}>
+                <a>Cerrar Sesión</a>
+              </button>
+            </div>
+          ) : (
+            <Link href="/api/auth/signin" legacyBehavior>
+              <a data-active={isActive("/signup")}>Log in</a>
+            </Link>
+          )}
+        </div>
+      )}
+      <style jsx>{`
+        .right {
+          margin-left: 1rem;
+        }
 
-  if (status === "loading") {
-    left = (
-      <div className="left">
-        <Link href="/" legacyBehavior>
-          <a className="bold" data-active={isActive("/")}>
-            Agenda Semanal
-          </a>
-        </Link>
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
+        button {
+          background: none;
+          border: none;
+          padding: 0;
+          font: inherit;
+          cursor: pointer;
+          outline: inherit;
+          display: flex;
+          align-items: center;
+        }
 
-          a {
-            text-decoration: none;
-            color: #000;
-            display: inline-block;
-          }
+        .bold {
+          font-weight: bold;
+          margin-right: 5px;
+        }
 
-          .left a[data-active="true"] {
-            color: gray;
-          }
+        span {
+          margin-left: 5px;
+        }
 
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
-      </div>
-    );
-    right = (
-      <div className="right">
-        <p>Validating session ...</p>
-        <style jsx>{`
-          .right {
-            margin-left: auto;
-          }
-        `}</style>
-      </div>
-    );
-  }
+        .dropdown-content {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+          z-index: 1;
+        }
 
-  if (!session) {
-    right = (
-      <div className="right">
-        <Link href="/api/auth/signin" legacyBehavior>
-          <a data-active={isActive("/signup")}>Log in</a>
-        </Link>
-        <style jsx>{`
-          a {
-            text-decoration: none;
-            color: #000;
-            display: inline-block;
-          }
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
 
-          a + a {
-            margin-left: 1rem;
-          }
-
-          .right {
-            margin-left: auto;
-          }
-
-          .right a {
-            border: 1px solid black;
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-          }
-        `}</style>
-      </div>
-    );
-  }
-
-  if (session) {
-    left = (
-      <div className="left">
-        <Link href="/create" legacyBehavior>
-          <a className="bold" data-active={isActive("/create")}>
-            Cargar Movimiento
-          </a>
-        </Link>
-        <Link href="/drafts" legacyBehavior>
-          <a className="bold" data-active={isActive("/drafts")}>
-            Movimientos Diarios
-          </a>
-        </Link>
-        <Link href="/" legacyBehavior>
-          <a className="bold" data-active={isActive("/")}>
-            Agenda Semanal
-          </a>
-        </Link>
-
-        <style jsx>{`
-          .bold {
-            align-items: start;
-            font-weight: bold;
-            color: gray;
-          }
-
-          a {
-            text-decoration: none;
-            color: #000;
-            display: inline-block;
-          }
-
-          .left {
-            display: flex;
-            align-items: center;
-            margin-right: auto;
-          }
-
-          .left a[data-active="true"] {
-            color: black;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-
-          @media (max-width: 600px) {
-            // Ajusta este valor según tus necesidades
-            .left {
-              flex-direction: column; // Cambia a un diseño de columna en pantallas más pequeñas
-              align-items: flex-start; // Asegura que los elementos se alineen a la izquierda
-            }
-
-            a + a {
-              margin-left: 0; // Elimina el margen izquierdo en pantallas más pequeñas
-              margin-top: 0.5rem; // Agrega un espacio vertical entre los elementos
-            }
-          }
-        `}</style>
-      </div>
-    );
-
-    right = (
-      <div className="right">
-        <span>{session.user.email}</span>
-
-        <button onClick={() => signOut()}>
-          <a>Cerrar Sesion</a>
-        </button>
-        <style jsx>{`
-          a {
-            display: flex;
-            text-decoration: none;
-            color: #000;
-          }
-
-          p {
-            font-size: 13px;
-            padding-right: 1rem;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-
-          .right {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            margin-top: 0rem; // Margen superior agregado
-          }
-
-          .right a {
-            border: 1px solid black;
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-            margin-bottom: 0.5rem;
-          }
-
-          button {
-            background-color: white;
-            border: none;
-            cursor: pointer;
-          }
-        `}</style>
-      </div>
-    );
-  }
-
-  return (
+        .dropdown-content a:hover {
+          background-color: #f1f1f1;
+        }
+      `}</style>
+    </div>
+  );return (
     <nav>
-      {left}
-      {right}
+      <div className="left">
+        <button onClick={toggleLeftMenu}>
+          <span className="bold">MENU</span>
+          <span>&#9662;</span>
+        </button>
+        {leftMenuOpen && (
+          <div className="dropdown-content common-menu">
+            <Link href="/create" legacyBehavior>
+              <a className="bold" data-active={isActive("/create")}>
+                Cargar Movimiento
+              </a>
+            </Link>
+            <Link href="/drafts" legacyBehavior>
+              <a className="bold" data-active={isActive("/drafts")}>
+                Movimientos Diarios
+              </a>
+            </Link>
+            <Link href="/" legacyBehavior>
+              <a className="bold" data-active={isActive("/")}>
+                Agenda Semanal
+              </a>
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <div className="right">
+        <button onClick={toggleRightMenu}>
+          <span className="bold right">SESION</span>
+          <span>&#9662;</span>
+        </button>
+        {rightMenuOpen && (
+          <div className="dropdown-content common-menu">
+            {session ? (
+              <div>
+                <span>{session.user.email}</span>
+                <button onClick={() => signOut()}>
+                  <a>Cerrar Sesión</a>
+                </button>
+              </div>
+            ) : (
+              <Link href="/api/auth/signin" legacyBehavior>
+                <a data-active={isActive("/signup")}>Log in</a>
+              </Link>
+            )}
+          </div>
+        )}
+      </div>
+
       <style jsx>{`
         nav {
           display: flex;
@@ -233,8 +227,60 @@ const Header: React.FC = () => {
           align-items: start;
           background-color: white;
         }
+
+        .left {
+          margin-right: 1rem;
+        }
+
+        .right {
+          margin-right: 7rem;
+          margin-left: auto; /* Mueve el contenedor al extremo derecho */
+        }
+
+        button {
+          background: none;
+          border: none;
+          padding: 0;
+          font: inherit;
+          cursor: pointer;
+          outline: inherit;
+          display: flex;
+          align-items: center;
+        }
+
+        .bold {
+          font-weight: bold;
+          margin-right: 5px;
+        }
+
+        span {
+          margin-left: 5px;
+        }
+
+        .common-menu {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+          z-index: 1;
+          
+        }
+
+        .common-menu a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .common-menu a:hover {
+          background-color: #f1f1f1;
+        }
       `}</style>
     </nav>
+  
   );
 };
 
