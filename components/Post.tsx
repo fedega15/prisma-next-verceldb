@@ -25,8 +25,9 @@ async function deletePost(id: number): Promise<void> {
   await fetch(`/api/post/${id}`, {
     method: "DELETE",
   });
-  await Router.push("/");
+  await Router.push("/drafts");
 }
+
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const formattedDate = new Date(post.createdAt).toLocaleDateString();
 
@@ -39,73 +40,83 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   };
 
   return (
-    <div
-      className="post-container"
-      onClick={() => Router.push("/p/[id]", `/p/${post.id}`)}
-    >
+    <div className="post-container">
       <div className="content">
-        <div className="text-content">
+        <div className="info">
           <h2>{post.title}</h2>
-        </div>
-        <div className="text-content">
           <h5>
             {post?.author?.name || "Unknown author"} - {formattedDate}
           </h5>
-        </div>
-        <div className="text-content">
           <ReactMarkdown children={post.content} />
         </div>
-        <div className="actions">
-          {!post.published && <button onClick={handlePublish}>Publicar</button>}
-          <button onClick={handleDelete}>Eliminar</button>
-        </div>
+      <div className="actions">
+        {!post.published && (
+          <button onClick={handlePublish}>Publicar</button>
+        )}
+        <button onClick={handleDelete}>Eliminar</button>
       </div>
+        
+      </div><style jsx>{`
+  .post-container {
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    padding: 0.3rem;
+    border: 1px solid #ececec;
+    margin-bottom: 1rem;
+  }
 
-      <style jsx>{`
-        .post-container {
-          display: flex;
-          justify-content: space-between;
-          color: inherit;
-          padding: 0.3rem;
-          border: 1px solid #ececec;
-          margin-bottom: 1rem;
-        }
+  .content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 
-        .content {
-          display: flex;
-          align-items: center;
-          flex: 1;
-        }
+  .info {
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;  // Cambiado a columna para que los elementos se apilen verticalmente
+  }
 
-        .info {
-          display: flex;
-          flex-direction: column;
-        }
+  h2,
+  h5 {
+    margin: 0;
+    display: inline;  // Hacer que los encabezados se muestren en línea
+    margin-bottom: 0.5rem;  // Añadir margen inferior entre h2 y h5
+  }
 
-        h2,
-        h5 {
-          margin: 0;
-        }
+  .text-content {
+    margin-left: 1rem;
+    flex-grow: 1;
+  }
 
-        .text-content {
-          margin-left: 1rem;
-          flex-grow: 1;
-        }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
 
-        .actions {
-          display: flex;
-          align-items: start;
-        }
+  button {
+    margin-right: 2px;
+    height: 40px;
+    background: #ececec;
+    border: 0;
+    border-radius: 0.125rem;
+    padding: 0.2rem 1rem;
+  }
 
-        button {
-          margin-right:2px;
-          height: 40px;
-          background: #ececec;
-          border: 0;
-          border-radius: 0.125rem;
-          padding: 0.2rem 1rem;
-        }
-      `}</style>
+  @media screen and (min-width: 601px) {
+    .info {
+      justify-content: space-between;
+      flex-direction: row;  // Cambiado a fila para que los elementos se alineen horizontalmente
+    }
+
+    h2,
+    h5 {
+      margin-bottom: 0;  // Eliminar el margen inferior entre h2 y h5
+      margin-right: 1rem;  // Añadir margen derecho entre h2 y h5
+    }
+  }
+`}</style>
     </div>
   );
 };

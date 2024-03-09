@@ -113,93 +113,114 @@ const Header: React.FC = () => {
     );
   }
 
- 
-if (session) {
-  left = (
-    <div className="left">
-      <Link href="/create" legacyBehavior>
-        <a className="bold" data-active={isActive("/create")}>
-          Cargar Movimiento
-        </a>
-      </Link>
-      <Link href="/drafts" legacyBehavior>
-        <a className="bold" data-active={isActive("/drafts")}>
-          Movimientos Diarios
-        </a>
-      </Link>
-      <Link href="/" legacyBehavior>
-        <a className="bold" data-active={isActive("/")}>
-          Agenda Semanal
-        </a>
-      </Link>
-      <style jsx>{`
-        .bold {
-          font-weight: bold;
-          color: gray;
-        }
+  if (session) {
+    left = (
+      <div className="left">
+        <Link href="/create" legacyBehavior>
+          <a className="bold" data-active={isActive("/create")}>
+            Cargar Movimiento
+          </a>
+        </Link>
+        <Link href="/drafts" legacyBehavior>
+          <a className="bold" data-active={isActive("/drafts")}>
+            Movimientos Diarios
+          </a>
+        </Link>
+        <Link href="/" legacyBehavior>
+          <a className="bold" data-active={isActive("/")}>
+            Agenda Semanal
+          </a>
+        </Link>
 
-        a {
-          text-decoration: none;
-          color: #000;
-          display: inline-block;
-        }
+        <style jsx>{`
+          .bold {
+            align-items: start;
+            font-weight: bold;
+            color: gray;
+          }
 
-        .left a[data-active="true"] {
-          color: black;
-        }
+          a {
+            text-decoration: none;
+            color: #000;
+            display: inline-block;
+          }
 
-        a + a {
-          margin-left: 1rem;
-        }
-      `}</style>
-    </div>
-  );
+          .left {
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+          }
 
-  right = (
-    <div className="right">
-      <span>
-       {session.user.email}
-      </span>
-     
-      <button onClick={() => signOut()}>
-        <a>Cerrar Sesion</a>
-      </button>
-      <style jsx>{`
-        a {
-          text-decoration: none;
-          color: #000;
-          display: inline-block;
-        }
+          .left a[data-active="true"] {
+            color: black;
+          }
 
-        p {
-          display: inline-block;
-          font-size: 13px;
-          padding-right: 1rem;
-        }
+          a + a {
+            margin-left: 1rem;
+          }
 
-        a + a {
-          margin-left: 1rem;
-        }
+          @media (max-width: 600px) {
+            // Ajusta este valor según tus necesidades
+            .left {
+              flex-direction: column; // Cambia a un diseño de columna en pantallas más pequeñas
+              align-items: flex-start; // Asegura que los elementos se alineen a la izquierda
+            }
 
-        .right {
-          margin-left: auto;
-        }
+            a + a {
+              margin-left: 0; // Elimina el margen izquierdo en pantallas más pequeñas
+              margin-top: 0.5rem; // Agrega un espacio vertical entre los elementos
+            }
+          }
+        `}</style>
+      </div>
+    );
 
-        .right a {
-          border: 1px solid black;
-          padding: 0.5rem 1rem;
-          border-radius: 3px;
-        }
+    right = (
+      <div className="right">
+        <span>{session.user.email}</span>
 
-        button {
-          background-color: white;
-          border: none;
-          cursor: pointer; /* Agregado para indicar que es un elemento interactivo */
-        }
-      `}</style>
-    </div>
-  );
-}
+        <button onClick={() => signOut()}>
+          <a>Cerrar Sesion</a>
+        </button>
+        <style jsx>{`
+          a {
+            display: flex;
+            text-decoration: none;
+            color: #000;
+          }
+
+          p {
+            font-size: 13px;
+            padding-right: 1rem;
+          }
+
+          a + a {
+            margin-left: 1rem;
+          }
+
+          .right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-top: 0rem; // Margen superior agregado
+          }
+
+          .right a {
+            border: 1px solid black;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            margin-bottom: 0.5rem;
+          }
+
+          button {
+            background-color: white;
+            border: none;
+            cursor: pointer;
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <nav>
@@ -209,7 +230,7 @@ if (session) {
         nav {
           display: flex;
           padding: 2rem;
-          align-items: center;
+          align-items: start;
           background-color: white;
         }
       `}</style>

@@ -67,7 +67,7 @@ const Drafts: React.FC<Props> = (props) => {
       </div>
       <style jsx>{`
         .post {
-          background: gray;
+          background: white;
           transition: box-shadow 0.1s ease-in;
         }
 
