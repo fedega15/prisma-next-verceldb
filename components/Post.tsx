@@ -8,7 +8,9 @@ export type PostProps = {
   content: string;
   published: boolean;
   createdAt: string;
+  movementType: string; // Nueva propiedad para el tipo de movimiento
 };
+
 // components/Post.tsx
 import React from "react";
 import Router from "next/router";
@@ -98,8 +100,8 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
         }
 
         button {
-          margin-right:5px;
-          height: 40px;
+          margin-right:2px;
+          height: 30px;
           background: #ececec;
           border: 0;
           border-radius: 0.125rem;
