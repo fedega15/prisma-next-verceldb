@@ -8,6 +8,7 @@ export type PostProps = {
   content: string;
   published: boolean;
   createdAt: string;
+  movementType: string; // Nueva propiedad para el tipo de movimiento
 };
 
 // components/Post.tsx
@@ -38,7 +39,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const handleDelete = async () => {
     await deletePost(post.id);
   };
-
+console.log(post)
   return (
     <div
       className="post-container"
@@ -47,6 +48,9 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       <div className="content">
         <div className="text-content">
           <h2>{post.title}</h2>
+        </div>
+        <div className="text-content">
+          <h2>{post.movementType}</h2>
         </div>
         <div className="text-content">
           <h5>
