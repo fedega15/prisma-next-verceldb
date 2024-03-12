@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -28,8 +32,8 @@ const Header: React.FC = () => {
     <nav>
       <div className="menu left">
         <button onClick={toggleLeftMenu}>
-          <span className="bold">MENU</span>
-          <span>&#9662;</span>
+          <span className="bold"><FontAwesomeIcon icon={faBars} /> MENU </span>
+      
         </button>
         {leftMenuOpen && (
           <div className={`dropdown-content ${leftMenuOpen ? 'left-open' : ''}`}>
@@ -54,8 +58,8 @@ const Header: React.FC = () => {
   
       <div className="menu right">
         <button onClick={toggleRightMenu}>
-          <span className="bold">SESION</span>
-          <span>&#9662;</span>
+          <span className="bold">  <FontAwesomeIcon icon={faUser} /> SESION</span>
+        
         </button>
         {rightMenuOpen && (
           <div className={`dropdown-content ${rightMenuOpen ? 'right-open' : ''}`}>
@@ -105,7 +109,7 @@ const Header: React.FC = () => {
         .bold {
           font-weight: bold;
           margin-right: 5px;
-          color: #001f3f;
+          color: #003366;
         }
   
         span {
@@ -116,7 +120,7 @@ const Header: React.FC = () => {
           display: flex;
           flex-direction: column;
           position: absolute;
-          background-color: #001f3f; 
+          background-color: #003366; 
           box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
           z-index: 1;
         }
@@ -130,7 +134,7 @@ const Header: React.FC = () => {
         }
   
         .dropdown-content a {
-          color: white;
+            color: white;
           padding: 11px 5px;
           text-decoration: none;
           display: block;

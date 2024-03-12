@@ -94,7 +94,7 @@ async function deletePost(id: number): Promise<void> {
       display: flex;
       justify-content: flex-end;
     }
-
+    
     button {
       margin-right: 2px;
       height: 40px;

@@ -61,6 +61,7 @@ const Drafts: React.FC<Props> = (props) => {
               <tr>
                 <th>Título</th>
                 <th>Autor</th>
+                <th>Fecha</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -69,6 +70,7 @@ const Drafts: React.FC<Props> = (props) => {
                 <tr key={post.id}>
                   <td>{post.title}</td>
                   <td>{post.author.name}</td>
+                  <td>{new Date(post.createdAt).toLocaleDateString()}</td>
                   <td>
                     <PostActions post={post} />
                   </td>
@@ -86,6 +88,7 @@ const Drafts: React.FC<Props> = (props) => {
         }
 
         h1 {
+          padding-right: -20px;
           font-size: 2em;
           margin-bottom: 20px;
           color: #003366; /* Azul oscuro para el título */
@@ -100,10 +103,16 @@ const Drafts: React.FC<Props> = (props) => {
           background-color: #fff;
         }
 
-        th,
+        
+        th {
+          border-radius: 3px;
+          border: 1px solid #ddd;
+          padding: 10px;
+          text-align: left;
+        }
         td {
           border: 1px solid #ddd;
-          padding: 15px;
+          padding: 1px;
           text-align: left;
         }
 
@@ -133,16 +142,30 @@ const Drafts: React.FC<Props> = (props) => {
         .delete {
           background: red; 
         }
+        
+        @media (max-width: 600px) {
+          th,
+          td {
+            width: 80%;
+            box-sizing: border-box;
+          }
+          table {
+            margin-left:-17px;
+             widht:60%}
+        }
+        
       `}</style>
     </Layout>
   );
 };
 
 const PostActions: React.FC<{ post: PostProps }> = ({ post }) => {
+
   const handlePublish = async () => {
     await fetch(`/api/publish/${post.id}`, {
       method: "PUT",
     });
+    await location.reload();
   };
 
   const handleDelete = async () => {
@@ -163,15 +186,15 @@ const PostActions: React.FC<{ post: PostProps }> = ({ post }) => {
     </button>
     
     <style jsx>{`
-      .publish {
-        background-color: darkblue; /* Puedes cambiar el color según tus preferencias */
-        color: black; /* Puedes ajustar el color del texto según tus preferencias */
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 10px;
-      }
+
+.publish {
+  background-color: #003366;
+  color: BLACK;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
     
       .delete {
         background-color: red;

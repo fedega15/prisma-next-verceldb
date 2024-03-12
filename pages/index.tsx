@@ -59,6 +59,18 @@ const Blog: React.FC<Props> = (props) => {
         <button className="delete" onClick={handleDelete}>
           Eliminar
         </button>
+        <style jsx>{`
+     
+        .delete {
+          background-color: red;
+          color: BLACK;
+          padding: 10px 15px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+     
+      `}</style>
       </>
     );
   };
@@ -73,6 +85,7 @@ const Blog: React.FC<Props> = (props) => {
               <tr>
                 <th>Título</th>
                 <th>Autor</th>
+                <th>Fecha</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -82,6 +95,8 @@ const Blog: React.FC<Props> = (props) => {
                   <tr key={post.id} className="post">
                     <td>{post.title}</td>
                     <td>{post.author.name}</td>
+                    <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+
                     <td>
                       <PostActions post={post} />
                     </td>
@@ -98,7 +113,7 @@ const Blog: React.FC<Props> = (props) => {
       </div>
       <style jsx>{`
         .page {
-          max-width: 1200px;
+          max-width: 1400px;
           margin: 0 auto;
           padding: 20px;
         }
@@ -110,18 +125,23 @@ const Blog: React.FC<Props> = (props) => {
         }
 
         table {
-          width: 100%;
+          width: 90%;
           border-collapse: collapse;
-          margin-top: 20px;
+          margin-top: -10px;
           border: 1px solid #ddd;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           background-color: #fff;
         }
 
-        th,
+        th {
+          border-radius: 3px;
+          border: 1px solid #ddd;
+          padding: 10px;
+          text-align: left;
+        }
         td {
           border: 1px solid #ddd;
-          padding: 15px;
+          padding: 3px;
           text-align: left;
         }
 
@@ -142,7 +162,14 @@ const Blog: React.FC<Props> = (props) => {
         .post + .post {
           margin-top: 0.5rem;
         }
-
+        .delete {
+          background-color: red;
+          color: BLACK;
+          padding: 10px 15px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
         button {
           background: #001a33; /* Azul oscuro para el fondo del botón por defecto */
           color: white;
@@ -161,6 +188,17 @@ const Blog: React.FC<Props> = (props) => {
         button:hover {
           background: #436b95; /* Azul claro para el hover */
         }
+        @media (max-width: 600px) {
+          th,
+          td {
+            width: 80%;
+            box-sizing: border-box;
+          }
+          table {
+            margin-left:-37px;
+             widht:60%}
+        }
+        
       `}</style>
     </Layout>
   );
