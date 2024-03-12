@@ -189,7 +189,6 @@ const PostActions: React.FC<{ post: PostProps }> = ({ post }) => {
 
 .publish {
   background-color: #003366;
-  color: BLACK;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
