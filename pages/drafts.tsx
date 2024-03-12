@@ -38,16 +38,12 @@ const Drafts: React.FC<Props> = (props) => {
   const { data: session } = useSession();
 
   const publishAllPosts = async () => {
-    // Lógica para publicar todos los posts
-    // Puedes usar un bucle para recorrer todos los drafts y publicarlos uno por uno
     for (const post of props.drafts) {
       await fetch(`/api/publish/${post.id}`, {
         method: "PUT",
       });
-      await Router.push("/")
+      await Router.push("/");
     }
-
-    // Después de publicar todos los posts, puedes recargar la página o hacer alguna otra acción
   };
 
   return (
@@ -55,39 +51,141 @@ const Drafts: React.FC<Props> = (props) => {
       <div className="page">
         <h1>Movimientos diarios</h1>
         {props.drafts.length > 0 && (
-          <button onClick={publishAllPosts}>Publicar Todos</button>
+          <button className="publish-all" onClick={publishAllPosts}>
+            Publicar Todos
+          </button>
         )}
         <main>
-          {props.drafts.map((post) => (
-            <div key={post.id} className="post">
-              <Post post={post} />
-            </div>
-          ))}
+          <table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {props.drafts.map((post) => (
+                <tr key={post.id}>
+                  <td>{post.title}</td>
+                  <td>{post.author.name}</td>
+                  <td>
+                    <PostActions post={post} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </main>
       </div>
       <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
+        .page {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
         }
 
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
+        h1 {
+          font-size: 2em;
+          margin-bottom: 20px;
+          color: #003366; /* Azul oscuro para el título */
         }
 
-        .post + .post {
-          margin-top: 2rem;
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+          border: 1px solid #ddd;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          background-color: #fff;
+        }
+
+        th,
+        td {
+          border: 1px solid #ddd;
+          padding: 15px;
+          text-align: left;
+        }
+
+        th {
+          background-color: #003366; /* Azul oscuro para el fondo del encabezado de la tabla */
+          color: white;
         }
 
         button {
-          background: #ececec;
+          background: #001a33; /* Azul oscuro para el fondo del botón por defecto */
+          color: white;
           border: 0;
-          border-radius: 0.125rem;
-          padding: 0.5rem 1rem;
+          border-radius: 0.25rem;
+          padding: 0.75rem 1.5rem;
+          margin-right: 0.5rem;
           margin-bottom: 1rem;
+          cursor: pointer;
+        }
+
+        button.publish-all {
+          background: #003366; /* Verde para el fondo del botón de publicar todos */
+        }
+
+        button:hover {
+          background: #436b95; /* Azul claro para el hover */
+        }
+        .delete {
+          background: red; 
         }
       `}</style>
     </Layout>
+  );
+};
+
+const PostActions: React.FC<{ post: PostProps }> = ({ post }) => {
+  const handlePublish = async () => {
+    await fetch(`/api/publish/${post.id}`, {
+      method: "PUT",
+    });
+  };
+
+  const handleDelete = async () => {
+    await fetch(`/api/post/${post.id}`, {
+      method: "DELETE",
+    });
+    await location.reload();
+  };
+
+  return (
+    <>{!post.published && (
+      <button className="publish" onClick={handlePublish}>
+        Publicar
+      </button>
+    )}
+    <button className="delete" onClick={handleDelete}>
+      Eliminar
+    </button>
+    
+    <style jsx>{`
+      .publish {
+        background-color: darkblue; /* Puedes cambiar el color según tus preferencias */
+        color: black; /* Puedes ajustar el color del texto según tus preferencias */
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+    
+      .delete {
+        background-color: red;
+        color: BLACK;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    
+      /* Otros estilos que puedas necesitar */
+    `}</style>
+    
+    </>
   );
 };
 

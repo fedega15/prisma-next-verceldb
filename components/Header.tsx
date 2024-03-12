@@ -22,162 +22,17 @@ const Header: React.FC = () => {
     setRightMenuOpen(!rightMenuOpen);
   };
 
-  let left = (
-    <div className="left">
-      <button onClick={toggleLeftMenu}>
-        <span className="bold">MENU</span>
-        <span>&#9662;</span>
-      </button>
-      {leftMenuOpen && (
-        <div className="dropdown-content">
-          <Link href="/create" legacyBehavior>
-            <a className="bold" data-active={isActive("/create")}>
-              Cargar Movimiento
-            </a>
-          </Link>
-          <Link href="/drafts" legacyBehavior>
-            <a className="bold" data-active={isActive("/drafts")}>
-              Movimientos Diarios
-            </a>
-          </Link>
-          <Link href="/" legacyBehavior>
-            <a className="bold" data-active={isActive("/")}>
-              Agenda Semanal
-            </a>
-          </Link>
-        </div>
-      )}
-      <style jsx>{`
-        .left {
-          margin-right: 1rem;
-        }
+  
 
-        button {
-          background: none;
-          border: none;
-          padding: 0;
-          font: inherit;
-          cursor: pointer;
-          outline: inherit;
-          display: flex;
-          align-items: center;
-        }
-
-        .bold {
-          font-weight: bold;
-          margin-right: 5px;
-        }
-
-        span {
-          margin-left: 5px;
-        }
-
-        .dropdown-content {
-         
-          display: flex;
-          flex-direction: column;
-          position: absolute;
-          background-color: #f9f9f9;
-          min-width: 160px;
-          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-          z-index: 1;
-          
-        }
-
-        .dropdown-content a {
-          color: black;
-          padding: 12px 16px;
-          text-decoration: none;
-          display: block;
-          
-        }
-        
-
-        .dropdown-content a:hover {
-          background-color: #f1f1f1;
-        }
-      `}</style>
-    </div>
-  );
-
-  let right = (
-    <div className="right">
-      <button onClick={toggleRightMenu}>
-        <span className="bold right">SESION</span>
-        <span>&#9662;</span>
-      </button>
-      {rightMenuOpen && (
-        <div className="dropdown-content">
-          {session ? (
-            <div>
-              <span>{session.user.email}</span>
-              <button onClick={() => signOut()}>
-                <a>Cerrar Sesión</a>
-              </button>
-            </div>
-          ) : (
-            <Link href="/api/auth/signin" legacyBehavior>
-              <a data-active={isActive("/signup")}>Log in</a>
-            </Link>
-          )}
-        </div>
-      )}
-      <style jsx>{`
-        .right {
-          margin-left: 1rem;
-        }
-
-        button {
-          background: none;
-          border: none;
-          padding: 0;
-          font: inherit;
-          cursor: pointer;
-          outline: inherit;
-          display: flex;
-          align-items: center;
-        }
-
-        .bold {
-          font-weight: bold;
-          margin-right: 5px;
-        }
-
-        span {
-          margin-left: 5px;
-        }
-
-        .dropdown-content {
-          display: flex;
-          flex-direction: column;
-          position: absolute;
-          background-color: #f9f9f9;
-          min-width: 160px;
-          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-          z-index: 1;
-        }
-
-        .dropdown-content a {
-          color: black;
-          padding: 12px 16px;
-          text-decoration: none;
-          display: block;
-        }
-
-        .dropdown-content a:hover {
-          background-color: #f1f1f1;
-        }
-      `}</style>
-    </div>
-  );return (
+  return (
     <nav>
-      <div className="left">
+      <div className="menu left">
         <button onClick={toggleLeftMenu}>
           <span className="bold">MENU</span>
           <span>&#9662;</span>
         </button>
         {leftMenuOpen && (
-          <div className="dropdown-content common-menu">
+          <div className={`dropdown-content ${leftMenuOpen ? 'left-open' : ''}`}>
             <Link href="/create" legacyBehavior>
               <a className="bold" data-active={isActive("/create")}>
                 Cargar Movimiento
@@ -196,21 +51,21 @@ const Header: React.FC = () => {
           </div>
         )}
       </div>
-
-      <div className="right">
+  
+      <div className="menu right">
         <button onClick={toggleRightMenu}>
-          <span className="bold right">SESION</span>
+          <span className="bold">SESION</span>
           <span>&#9662;</span>
         </button>
         {rightMenuOpen && (
-          <div className="dropdown-content common-menu">
+          <div className={`dropdown-content ${rightMenuOpen ? 'right-open' : ''}`}>
             {session ? (
-              <div>
-                <span>{session.user.email}</span>
+              <>
+                <a>{session.user.email}</a>
                 <button onClick={() => signOut()}>
-                  <a>Cerrar Sesión</a>
+                  <a className="ab">Cerrar Sesión</a>
                 </button>
-              </div>
+              </>
             ) : (
               <Link href="/api/auth/signin" legacyBehavior>
                 <a data-active={isActive("/signup")}>Log in</a>
@@ -219,7 +74,7 @@ const Header: React.FC = () => {
           </div>
         )}
       </div>
-
+  
       <style jsx>{`
         nav {
           display: flex;
@@ -227,16 +82,15 @@ const Header: React.FC = () => {
           align-items: start;
           background-color: white;
         }
-
-        .left {
+  
+        .menu {
           margin-right: 1rem;
         }
-
-        .right {
-          margin-right: 7rem;
-          margin-left: auto; /* Mueve el contenedor al extremo derecho */
+  
+        .menu.left {
+          margin-right: auto;
         }
-
+  
         button {
           background: none;
           border: none;
@@ -247,41 +101,55 @@ const Header: React.FC = () => {
           display: flex;
           align-items: center;
         }
-
+  
         .bold {
           font-weight: bold;
           margin-right: 5px;
+          color: #001f3f;
         }
-
+  
         span {
           margin-left: 5px;
         }
-
-        .common-menu {
+  
+        .dropdown-content {
           display: flex;
           flex-direction: column;
           position: absolute;
-          background-color: #f9f9f9;
-          min-width: 160px;
+          background-color: #001f3f; 
           box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
           z-index: 1;
-          
         }
-
-        .common-menu a {
-          color: black;
-          padding: 12px 16px;
+  
+        .dropdown-content.left-open {
+          left: 0;
+        }
+  
+        .dropdown-content.right-open {
+          right: 0;
+        }
+  
+        .dropdown-content a {
+          color: white;
+          padding: 11px 5px;
           text-decoration: none;
           display: block;
         }
-
-        .common-menu a:hover {
-          background-color: #f1f1f1;
+  
+        .dropdown-content .ab {
+          width: 100%;
+          color: white;
+          padding: 11px 5px;
+          text-decoration: none;
+          display: block;
+        }
+  
+        .dropdown-content a:hover {
+          background-color: #436b95;
         }
       `}</style>
     </nav>
-  
-  );
+  );  
 };
 
 export default Header;

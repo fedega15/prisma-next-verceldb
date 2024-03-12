@@ -31,13 +31,13 @@ const Draft: React.FC = () => {
 
   return (
     <Layout>
-      <div>
+      <div className="page">
         <form onSubmit={submitData}>
           <h1>Cargar Nuevo</h1>
           <input
             autoFocus
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Monto y tipo de movimiento  "
+            placeholder="Monto y tipo de movimiento"
             type="text"
             value={title}
           />
@@ -54,19 +54,25 @@ const Draft: React.FC = () => {
             rows={8}
             value={content}
           />
-          <input disabled={!content || !title} type="submit" value="Crear Movimiento " />
-          <a className="back" href="#" onClick={() => Router.push("/")}>
-            Cancelar
-          </a>
+          <div className="button-container">
+            <input disabled={!content || !title} type="submit" value="Crear Movimiento" />
+            <a className="back" href="#" onClick={() => Router.push("/")}>
+              Cancelar
+            </a>
+          </div>
         </form>
       </div>
       <style jsx>{`
         .page {
-          background: white;
-          padding: 3rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 2em;
+          margin-bottom: 20px;
+          color: #003366; /* Azul oscuro para el título */
         }
 
         input[type="text"],
@@ -75,17 +81,23 @@ const Draft: React.FC = () => {
           padding: 0.5rem;
           margin: 0.5rem 0;
           border-radius: 0.25rem;
-          border: 0.125rem solid rgba(0, 0, 0, 0.2);
+          border: 1px solid #ddd;
         }
 
         input[type="submit"] {
-          background: #ececec;
+          background: #003366; /* Azul oscuro para el fondo del botón */
+          color: white;
           border: 0;
-          padding: 1rem 2rem;
+          border-radius: 0.25rem;
+          padding: 0.75rem 1.5rem;
+          cursor: pointer;
         }
 
         .back {
           margin-left: 1rem;
+          color: #003366; /* Azul oscuro para el enlace de cancelar */
+          text-decoration: underline;
+          cursor: pointer;
         }
 
         /* Estilos para el aviso del tipo de movimiento */
@@ -100,6 +112,13 @@ const Draft: React.FC = () => {
 
         .ingreso {
           color: green; /* Color para ingresos */
+        }
+
+        .button-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 1rem;
         }
       `}</style>
     </Layout>
